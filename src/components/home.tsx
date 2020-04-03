@@ -34,13 +34,16 @@ class HomePage extends Component<Props, State>  {
         return (
             <Container>
                 <p>{this.state.isFetching ? 'Fetching users...' : 
-                    <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
-                            {
-                                this.state.countries.map((country: countryEntity) => 
-                                    <Dropdown.Item eventKey={country.country} onClick={()=>this.setState({selectedCountry: country.country})}>{country.country}</Dropdown.Item>
-                                )
-                            }
-                    </DropdownButton>
+                    <div>
+                        <label>Select country</label>
+                        <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
+                                {
+                                    this.state.countries.map((country: countryEntity) => 
+                                        <Dropdown.Item eventKey={country.country} onClick={()=>this.setState({selectedCountry: country.country})}>{country.country}</Dropdown.Item>
+                                    )
+                                }
+                        </DropdownButton>
+                    </div>
                 }</p>
             </Container>
         )
