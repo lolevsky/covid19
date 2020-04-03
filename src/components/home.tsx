@@ -64,6 +64,9 @@ class HomePage extends Component<Props, State>  {
     }
 
     render() {
+        if (this.state == null) {
+			return <div>Loading...</div>
+		}
         return (
             <Container>
                 <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
