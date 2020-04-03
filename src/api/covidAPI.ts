@@ -1,14 +1,14 @@
 import {countryEntity} from '../model/country';
+import {historicalEntity} from '../model/historical';
 
 class CovidAPI {
 
-    public async getAllCountries() : Promise<countryEntity[]> {
-        const covidCountriesURL : string = 'https://corona.lmao.ninja/countries?sort=country';
-    
-        return fetch(covidCountriesURL, {cache: "force-cache"})
-          .then((response) => this.checkStatus(response))
-          .then((response) => this.parseJSON(response))
-          .then((data) => this.resolveCountries(data));
+    api<T>(url: string): Promise<T> {
+        return fetch(url, {cache: "reload"})
+            .then((response) => this.checkStatus(response))
+            .then(response => {
+                return response.json() as Promise<T>
+            })
     }
 
     private checkStatus(response : Response) : Promise<Response> {
@@ -19,31 +19,13 @@ class CovidAPI {
           throw error;
         }
     }
-    
-    private parseJSON(response : Response) : any {
-        return response.json();
+
+    public async getAllCountries() : Promise<countryEntity[]> {
+        return this.api<countryEntity[]>('https://corona.lmao.ninja/countries?sort=country');
     }
-    
-    private resolveCountries (data : any) : Promise<countryEntity[]> {
-        const countries = data.map((covidCountry: any) => {
-            var country : countryEntity = {
-                id: covidCountry.id,
-                country: covidCountry.country,
-                cases: covidCountry.cases,
-                todayCases: covidCountry.todayCases,
-                deaths: covidCountry.deaths,
-                todayDeaths: covidCountry.todayDeaths,
-                recovered: covidCountry.recovered,
-                active: covidCountry.active,
-                critical: covidCountry.critical,
-                updated: covidCountry.updated,
-                countryInfo: covidCountry.countryInfo
-            };
-    
-            return country;
-        });
-    
-        return Promise.resolve(countries);
+
+    public async getHistoricalByCountry(country: string) : Promise<historicalEntity> {
+        return this.api<historicalEntity>('https://corona.lmao.ninja/v2/historical/'+country);
     }
 }
 

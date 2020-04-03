@@ -6,14 +6,17 @@ import { Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import * as cookieName from '../constants/cookiesname';
 
 import { countryEntity } from '../model/country';
+import { historicalEntity, createEmptyHistoricalEntity } from '../model/historical';
 import { covidAPI } from '../api/covidAPI';
 
 interface Props {
 }
 
 interface State {
-    isFetching: boolean;
-    countries: Array<countryEntity>
+    isFetchingCountries: boolean,
+    isFetchingData: boolean,
+    countries: Array<countryEntity>,
+    historicalEntity: historicalEntity,
     selectedCountry: string
   }
 
@@ -23,36 +26,47 @@ class HomePage extends Component<Props, State>  {
     constructor(props: any) {
         super(props);
         this.state = {
-            isFetching: true,
+            isFetchingCountries: true,
+            isFetchingData: true,
             countries: [],
+            historicalEntity: createEmptyHistoricalEntity(),
             selectedCountry: cookies.get(cookieName.SELECTED_COUNTRY)
         };
     };
 
     public componentDidMount() {
         covidAPI.getAllCountries().then((countries) =>
-          this.setState({ countries: countries , isFetching: false})
+          this.setState({ countries: countries , isFetchingCountries: false, isFetchingData: true})
         );
     }
 
-    handleClick(country: string) {
-        this.setState({selectedCountry: country});
+    handleCountryClick(country: string) {
+        this.setState({selectedCountry: country, isFetchingData: true});
         cookies.set(cookieName.SELECTED_COUNTRY, country, { path: '/' });
+
+        covidAPI.getHistoricalByCountry(country).then((historicalEntity) =>
+          this.setState({historicalEntity: historicalEntity, isFetchingData: false})
+        );
     }
 
     render() {
         return (
             <Container>
-                <p>{this.state.isFetching ? 'Fetching users...' : 
+                <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
                     <div>
                         <label>Select country</label>
                         <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
                                 {
                                     this.state.countries.map((country: countryEntity) => 
-                                        <Dropdown.Item eventKey={country.country} onClick={() => {this.handleClick(country.country)}}>{country.country}</Dropdown.Item>
+                                        <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country.country)}}>{country.country}</Dropdown.Item>
                                     )
                                 }
                         </DropdownButton>
+                        {this.state.isFetchingData ? '' : 
+                            Object.entries(this.state.historicalEntity.timeline.cases).map(([k, v], i) => 
+                                <p>{k} {v}</p>
+                            )
+                        }
                     </div>
                 }</p>
             </Container>
