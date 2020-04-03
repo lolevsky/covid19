@@ -35,9 +35,23 @@ class HomePage extends Component<Props, State>  {
     };
 
     public componentDidMount() {
-        covidAPI.getAllCountries().then((countries) =>
-          this.setState({ countries: countries , isFetchingCountries: false, isFetchingData: true})
-        );
+        covidAPI.getAllCountries().then((countries) =>{
+            countries.sort((obj1, obj2) => {
+                if (obj1.country > obj2.country) {
+                    return 1;
+                }
+            
+                if (obj1.country < obj2.country) {
+                    return -1;
+                }
+            
+                return 0;
+            });
+            this.setState({ countries: countries , isFetchingCountries: false, isFetchingData: true})
+            if(this.state.selectedCountry){
+              this.handleCountryClick(this.state.selectedCountry)
+            }
+        }).catch(err => alert(err));
     }
 
     handleCountryClick(country: string) {
@@ -46,7 +60,7 @@ class HomePage extends Component<Props, State>  {
 
         covidAPI.getHistoricalByCountry(country).then((historicalEntity) =>
           this.setState({historicalEntity: historicalEntity, isFetchingData: false})
-        );
+        ).catch(err => alert(err));
     }
 
     render() {
