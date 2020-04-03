@@ -10,7 +10,7 @@ const Navigation = () => (
     
         <Navbar bg="primary" variant="dark" expand="lg" sticky="top">
             <Container>
-            <Navbar.Brand as={Link} to={ROUTES.LANDING}>COVID19 Data</Navbar.Brand>
+            <Navbar.Brand as={Link} to={ROUTES.INFO}>COVID19 Data</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
