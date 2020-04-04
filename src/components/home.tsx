@@ -109,11 +109,11 @@ class HomePage extends Component<Props, State>  {
                             <Container>
                                 <br/>
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
                                         <LineChart
                                             data={this.state.timelineData}>
                                             <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
@@ -125,10 +125,10 @@ class HomePage extends Component<Props, State>  {
                                 </div>
                                 <br/>
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
                                         <BarChart data={this.state.timelineData}>
                                             <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
@@ -140,12 +140,12 @@ class HomePage extends Component<Props, State>  {
                                 </div>
                                 <br/>
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
-                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
                                         <AreaChart width={500}
                                             height={400}
                                             data={this.state.timelineData}>
                                             <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
                                             <YAxis />
                                             <Tooltip />
                                             <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
