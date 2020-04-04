@@ -12,6 +12,7 @@ import { countryEntity } from '../model/country';
 import { historicalEntity, createEmptyHistoricalEntity } from '../model/historical';
 import { timelineData, createTimelineData } from '../model/timelineData';
 import { covidAPI } from '../api/covidAPI';
+import { firebaseAnalytics } from './firebase/firebase';
 
 interface Props {
 }
@@ -41,6 +42,8 @@ class HomePage extends Component<Props, State>  {
     };
 
     public componentDidMount() {
+        firebaseAnalytics.logEvent('Home page - loaded')
+
         covidAPI.getAllCountries().then((countries) =>{
             countries.sort((obj1, obj2) => {
                 if (obj1.country > obj2.country) {
@@ -57,10 +60,14 @@ class HomePage extends Component<Props, State>  {
             if(!!this.state.selectedCountry){
               this.handleCountryClick(this.state.selectedCountry)
             }
-        }).catch(err => alert(err));
+        }).catch(err => {
+            firebaseAnalytics.logEvent('Home page - alert ' + err)
+            alert(err)});
     }
 
     handleCountryClick(country: string) {
+        firebaseAnalytics.logEvent('Home country selected - ' + country)
+
         this.setState({selectedCountry: country, isFetchingData: true});
         cookies.set(cookieName.SELECTED_COUNTRY, country, { path: '/' });
 
