@@ -15,11 +15,17 @@ export const CircleReactComponent = ({numberCases} : { numberCases: number, lat:
     height:numberCases/1000,
   };
 
-  return  <div style={circleStyle}>
-              <div style={{textAlign: 'center', color: 'red'}}>
-                {numberCases}
-              </div>
-          </div>;
+  var textStyle = {
+    color: 'red',
+    fontSize: numberCases/3000 + 'px'
+  };
+
+  //<div style={circleStyle}>
+  //</div>;
+  return  <p style={textStyle}>
+                <b>{numberCases}</b>
+              </p>;
+          
 }
 
 interface Props {
@@ -60,7 +66,7 @@ class MapPage extends React.Component<Props, State>{
             }}
             defaultZoom={0}>
             {this.state.isFetchingCountries ? '' : 
-              this.state.countries.filter((country) => country.cases > 10).map((country: countryEntity) => 
+              this.state.countries.filter((country) => country.cases > 1000).map((country: countryEntity) => 
               <CircleReactComponent
                 lat={country.countryInfo.lat}
                 lng={country.countryInfo.long}
