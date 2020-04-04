@@ -54,7 +54,7 @@ class HomePage extends Component<Props, State>  {
                 return 0;
             });
             this.setState({ countries: countries , isFetchingCountries: false, isFetchingData: true})
-            if(this.state.selectedCountry){
+            if(!!this.state.selectedCountry){
               this.handleCountryClick(this.state.selectedCountry)
             }
         }).catch(err => alert(err));
@@ -68,7 +68,7 @@ class HomePage extends Component<Props, State>  {
           this.setState({historicalEntity: historicalEntity, isFetchingData: false})
           this.prepareDataForGraph()
         }
-        ).catch(err => alert(err));
+        ).catch(err => alert(err + ' Oops, we have some issu, please try to refresh'));
     }
 
     prepareDataForGraph(){
@@ -89,14 +89,14 @@ class HomePage extends Component<Props, State>  {
 
     render() {
         if (this.state == null) {
-			return <div>Loading...</div>
+			return <div style={{display: 'flex', justifyContent: 'center'}}>Loading...</div>
 		}
         return (
             <Container>
                 <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
                     <div>
                         <Container style={{display: 'flex', justifyContent: 'center'}}>
-                                <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
+                                <DropdownButton id="dropdown-basic-button" title={!!this.state.selectedCountry? this.state.selectedCountry : 'Please select country'} >
                                         {
                                             this.state.countries.map((country: countryEntity) => 
                                                 <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country.country)}}>{country.country}</Dropdown.Item>
