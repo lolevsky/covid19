@@ -119,7 +119,7 @@ class HomePage extends Component<Props, State>  {
                                             <Legend />
                                             <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
                                             <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
-                                            <Line type="monotone" dataKey="recovered" stroke="#82ca9d" />
+                                            <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
@@ -133,8 +133,8 @@ class HomePage extends Component<Props, State>  {
                                             <Tooltip />
                                             <Legend />
                                             <Bar dataKey="cases" fill="#8884d8" />
-                                            <Bar dataKey="recovered" fill="#82ca9d" />
-                                            <Bar dataKey="deaths" fill="#ffc658" />
+                                            <Bar dataKey="deaths" fill="#82ca9d" />
+                                            <Bar dataKey="recovered" fill="#ffc658" />
                                         </BarChart>
                                     </ResponsiveContainer>
                                 </div>
