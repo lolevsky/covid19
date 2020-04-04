@@ -24,11 +24,11 @@ interface State {
     historicalEntity: historicalEntity,
     timelineData: Array<timelineData>,
     selectedCountryEntity: countryEntity
-  }
+}
 
 const cookies = new Cookies();
 
-class ReportPage extends Component<Props, State>  {
+class ReportPage extends Component<Props, State> {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -42,7 +42,7 @@ class ReportPage extends Component<Props, State>  {
     };
 
     public componentDidMount() {
-        firebaseAnalytics.logEvent('Home page - loaded')
+        firebaseAnalytics.logEvent('Report page - loaded')
 
         covidAPI.getAllCountries().then((countries) =>{
             countries.sort((obj1, obj2) => {
@@ -61,12 +61,12 @@ class ReportPage extends Component<Props, State>  {
               this.handleCountryClick(this.state.selectedCountryEntity)
             }
         }).catch(err => {
-            firebaseAnalytics.logEvent('Home page - alert ' + err)
+            firebaseAnalytics.logEvent('Report page - alert ' + err)
             alert(err)});
     }
 
     handleCountryClick(country: countryEntity) {
-        firebaseAnalytics.logEvent('Home country selected - ' + country.country)
+        firebaseAnalytics.logEvent('Report country selected - ' + country.country)
 
         this.setState({selectedCountryEntity: country, isFetchingData: true});
         cookies.set(cookieName.SELECTED_COUNTRY_ENTETY, country, { path: '/' });
