@@ -1,3 +1,4 @@
 export const LANDING = '/';
 export const INFO = '/info';
-export const HOME = '/home';
+export const REPORT = '/report';
+export const MAP = '/map';

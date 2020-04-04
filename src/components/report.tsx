@@ -28,7 +28,7 @@ interface State {
 
 const cookies = new Cookies();
 
-class HomePage extends Component<Props, State>  {
+class ReportPage extends Component<Props, State>  {
     constructor(props: any) {
         super(props);
         this.state = {
@@ -183,5 +183,5 @@ class HomePage extends Component<Props, State>  {
     };
 }
 
-export default HomePage;
-export { HomePage };
+export default ReportPage;
+export { ReportPage };

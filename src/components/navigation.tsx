@@ -14,7 +14,8 @@ const Navigation = () => (
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link as={Link} to={ROUTES.HOME}>Home</Nav.Link>
+                    <Nav.Link as={Link} to={ROUTES.REPORT}>Report</Nav.Link>
+                    <Nav.Link as={Link} to={ROUTES.MAP}>Map</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
             </Container>

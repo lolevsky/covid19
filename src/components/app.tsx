@@ -5,7 +5,8 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 import Navigation from './navigation';
 
 import LandingPage from './landing';
-import HomePage from './home';
+import ReportPage from './report';
+import MapPage from './map';
 
 import * as ROUTES from '../constants/routes';
 import { firebaseAnalytics } from './firebase/firebase';
@@ -20,10 +21,10 @@ class App extends React.Component{
       <Router>
         <div>
           <Navigation />
-          <br />
-          <Route exact path={ROUTES.LANDING} component={HomePage} />
-          <Route path={ROUTES.HOME} component={HomePage} />
+          <Route exact path={ROUTES.LANDING} component={ReportPage} />
+          <Route path={ROUTES.REPORT} component={ReportPage} />
           <Route path={ROUTES.INFO} component={LandingPage} />
+          <Route path={ROUTES.MAP} component={MapPage} />
         </div>
       </Router>
    );
