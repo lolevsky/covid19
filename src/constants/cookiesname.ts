@@ -1,1 +1,1 @@
-export const SELECTED_COUNTRY = 'select-country';
+export const SELECTED_COUNTRY_ENTETY = 'select-country-entety';

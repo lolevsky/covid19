@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React,  { Component } from 'react';
 
 import Cookies from 'universal-cookie';
 import { Container, Dropdown, DropdownButton } from 'react-bootstrap';
@@ -23,7 +23,7 @@ interface State {
     countries: Array<countryEntity>,
     historicalEntity: historicalEntity,
     timelineData: Array<timelineData>,
-    selectedCountry: string
+    selectedCountryEntity: countryEntity
   }
 
 const cookies = new Cookies();
@@ -37,7 +37,7 @@ class HomePage extends Component<Props, State>  {
             countries: [],
             historicalEntity: createEmptyHistoricalEntity(),
             timelineData: [],
-            selectedCountry: cookies.get(cookieName.SELECTED_COUNTRY)
+            selectedCountryEntity: cookies.get(cookieName.SELECTED_COUNTRY_ENTETY)
         };
     };
 
@@ -57,21 +57,21 @@ class HomePage extends Component<Props, State>  {
                 return 0;
             });
             this.setState({ countries: countries , isFetchingCountries: false, isFetchingData: true})
-            if(!!this.state.selectedCountry){
-              this.handleCountryClick(this.state.selectedCountry)
+            if(!!this.state.selectedCountryEntity){
+              this.handleCountryClick(this.state.selectedCountryEntity)
             }
         }).catch(err => {
             firebaseAnalytics.logEvent('Home page - alert ' + err)
             alert(err)});
     }
 
-    handleCountryClick(country: string) {
-        firebaseAnalytics.logEvent('Home country selected - ' + country)
+    handleCountryClick(country: countryEntity) {
+        firebaseAnalytics.logEvent('Home country selected - ' + country.country)
 
-        this.setState({selectedCountry: country, isFetchingData: true});
-        cookies.set(cookieName.SELECTED_COUNTRY, country, { path: '/' });
+        this.setState({selectedCountryEntity: country, isFetchingData: true});
+        cookies.set(cookieName.SELECTED_COUNTRY_ENTETY, country, { path: '/' });
 
-        covidAPI.getHistoricalByCountry(country).then((historicalEntity) => {
+        covidAPI.getHistoricalByCountry(country.country).then((historicalEntity) => {
           this.setState({historicalEntity: historicalEntity, isFetchingData: false})
           this.prepareDataForGraph()
         }
@@ -103,17 +103,30 @@ class HomePage extends Component<Props, State>  {
                 <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
                     <div>
                         <Container style={{display: 'flex', justifyContent: 'center'}}>
-                                <DropdownButton id="dropdown-basic-button" title={!!this.state.selectedCountry? this.state.selectedCountry : 'Please select country'} >
+                                <DropdownButton id="dropdown-basic-button" title={!!this.state.selectedCountryEntity? this.state.selectedCountryEntity.country : 'Please select country'} >
                                         {
                                             this.state.countries.map((country: countryEntity) => 
-                                                <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country.country)}}>{country.country}</Dropdown.Item>
+                                                <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country)}}>{country.country}</Dropdown.Item>
                                             )
                                         }
                                 </DropdownButton>
                             </Container>
-                    
                         {this.state.isFetchingData ? '' : 
                             <Container>
+                                <br/>
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <p>
+                                        Today In <b>{
+                                        this.state.selectedCountryEntity.country
+                                        }</b> are <b>{
+                                        this.state.selectedCountryEntity.cases
+                                        }</b> cases, <b>{
+                                        this.state.selectedCountryEntity.recovered
+                                        }</b> recovered and <b>{
+                                        this.state.selectedCountryEntity.deaths
+                                        }</b> deaths
+                                    </p>    
+                                </div>
                                 <br/>
                                 <div style={{display: 'flex', justifyContent: 'center'}}>
                                     <ResponsiveContainer width='100%' aspect={4.0/3.0}>
