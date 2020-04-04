@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Cookies from 'universal-cookie';
 import { Container, Dropdown, DropdownButton } from 'react-bootstrap';
 import {
-    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer,
+    LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Bar, BarChart,
   } from 'recharts';
 
 import * as cookieName from '../constants/cookiesname';
@@ -95,31 +95,66 @@ class HomePage extends Component<Props, State>  {
             <Container>
                 <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
                     <div>
-                        <label>Select country</label>
-                        <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
-                                {
-                                    this.state.countries.map((country: countryEntity) => 
-                                        <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country.country)}}>{country.country}</Dropdown.Item>
-                                    )
-                                }
-                        </DropdownButton>
+                        <Container style={{display: 'flex', justifyContent: 'center'}}>
+                                <DropdownButton id="dropdown-basic-button" title={this.state.selectedCountry} >
+                                        {
+                                            this.state.countries.map((country: countryEntity) => 
+                                                <Dropdown.Item eventKey={country.country} onClick={() => {this.handleCountryClick(country.country)}}>{country.country}</Dropdown.Item>
+                                            )
+                                        }
+                                </DropdownButton>
+                            </Container>
+                    
                         {this.state.isFetchingData ? '' : 
-                            <div>
+                            <Container>
                                 <br/>
-                                <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                    <LineChart
-                                        data={this.state.timelineData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="date" />
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
-                                        <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
-                                        <Line type="monotone" dataKey="recovered" stroke="#82ca9d" />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                            </div>
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                        <LineChart
+                                            data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
+                                            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
+                                            <Line type="monotone" dataKey="recovered" stroke="#82ca9d" />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <br/>
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                        <BarChart data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Bar dataKey="cases" fill="#8884d8" />
+                                            <Bar dataKey="recovered" fill="#82ca9d" />
+                                            <Bar dataKey="deaths" fill="#ffc658" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <br/>
+                                <div style={{display: 'flex', justifyContent: 'center'}}>
+                                    <ResponsiveContainer width='70%' aspect={4.0/3.0}>
+                                        <AreaChart width={500}
+                                            height={400}
+                                            data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" />
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                                            <Area type="monotone" dataKey="deaths" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                                            <Area type="monotone" dataKey="recovered" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
+                            </Container>
                         }
                     </div>
                 }</p>
