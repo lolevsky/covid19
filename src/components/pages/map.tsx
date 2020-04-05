@@ -62,7 +62,7 @@ class MapPage extends React.Component<Props, State>{
 
   public render() {
     return (
-        <div>
+        <div style={{ height: '100vh', width: '100%' }}>
           <Map 
             google={this.props.google} 
             zoom={3}
