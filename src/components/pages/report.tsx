@@ -140,7 +140,7 @@ class ReportPage extends Component<Props, State> {
                                 }</b> recovered and <b>{
                                 this.state.selectedCountryEntity.deaths
                                 }</b> deaths
-                                </p>    
+                                </p>  
                                 </div>
                                 : ''
                         }
