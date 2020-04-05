@@ -1,4 +1,4 @@
 export const LANDING = '/';
-export const INFO = '/info';
+export const ABOUT = '/about';
 export const REPORT = '/report';
 export const MAP = '/map';

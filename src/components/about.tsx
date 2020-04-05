@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { firebaseAnalytics } from './firebase/firebase';
 
-class LandingPage extends React.Component{
+class AboutPage extends React.Component{
 
     public componentDidMount() {
         firebaseAnalytics.logEvent('LandingPage - loaded')
@@ -19,4 +19,4 @@ class LandingPage extends React.Component{
   }
 }
 
-export default LandingPage;
+export default AboutPage;

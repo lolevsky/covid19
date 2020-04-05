@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Navigation from './navigation';
 
-import LandingPage from './landing';
+import AboutPage from './about';
 import ReportPage from './report';
 import MapPage from './map';
 
@@ -23,7 +23,7 @@ class App extends React.Component{
           <Navigation />
           <Route exact path={ROUTES.LANDING} component={ReportPage} />
           <Route path={ROUTES.REPORT} component={ReportPage} />
-          <Route path={ROUTES.INFO} component={LandingPage} />
+          <Route path={ROUTES.ABOUT} component={AboutPage} />
           <Route path={ROUTES.MAP} component={MapPage} />
         </div>
       </Router>

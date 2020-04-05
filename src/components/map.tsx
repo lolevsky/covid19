@@ -7,13 +7,13 @@ import { covidAPI } from '../api/covidAPI';
 import { countryEntity } from '../model/country';
 
 export const CircleReactComponent = ({numberCases} : { numberCases: number, lat: number , lng: number} ) => {
-  var circleStyle = {
-    display:'inline-block',
-    backgroundColor: '#8884d8',
-    borderRadius: '50%',
-    width:numberCases/1000,
-    height:numberCases/1000,
-  };
+  // var circleStyle = {
+  //   display:'inline-block',
+  //   backgroundColor: '#8884d8',
+  //   borderRadius: '50%',
+  //   width:numberCases/1000,
+  //   height:numberCases/1000,
+  // };
 
   var textStyle = {
     color: 'red',
