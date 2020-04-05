@@ -4,20 +4,19 @@ import GoogleMapReact from 'google-map-react';
 
 import { firebaseAnalytics } from './firebase/firebase';
 import { covidAPI } from '../api/covidAPI';
-import { countryEntity } from '../model/country';
-import { Modal, Button } from 'react-bootstrap';
+import { countryEntity, createEmptyCountryEntity } from '../model/country';
+import { Modal } from 'react-bootstrap';
 
-export const DataReactComponent = ({countryEntity, onClickHandler} : { onClickHandler: Function, countryEntity: countryEntity, lat: number , lng: number} ) => {
-  
-  var textStyle = {
+export const DataReactComponent = ({countryEntity, onClickHandler} : { onClickHandler: any, countryEntity: countryEntity, lat: number , lng: number} ) => {
+  const greatPlaceStyle = {
+    position: 'absolute' as 'absolute',
     color: 'red',
     fontSize: countryEntity.cases/3000 > 12 ? countryEntity.cases/3000 + 'px' : '12px'
-  };
+  }
 
-  return  <p style={textStyle} onClick={() => onClickHandler()}>
-                <b>{countryEntity.cases}</b>
-              </p>;
-          
+  return  <div style={greatPlaceStyle} onClick={() => onClickHandler()}>
+              <b>{countryEntity.cases}</b>
+          </div>;   
 }
 
 interface Props {
@@ -26,20 +25,26 @@ interface Props {
 interface State {
   isFetchingCountries: boolean,
   countries: Array<countryEntity>,
-  showModal: boolean
+  showModal: boolean,
+  selectedCountryEntity: countryEntity
 }
 
 class MapPage extends React.Component<Props, State>{
 
-  handleClose = () => this.setState({showModal: false});
-  handleShow = () => this.setState({showModal: true});
+  handleClose(){
+    this.setState({showModal: false, selectedCountryEntity: createEmptyCountryEntity()});
+  }
+  handleShow(countryEntity: countryEntity){
+    this.setState({showModal: true, selectedCountryEntity: countryEntity});
+  }
   
   constructor(props: any) {
     super(props);
     this.state = {
         isFetchingCountries: true,
         countries: [],
-        showModal: false
+        showModal: false,
+        selectedCountryEntity: createEmptyCountryEntity()
     };
   };
 
@@ -69,23 +74,29 @@ class MapPage extends React.Component<Props, State>{
                 lat={country.countryInfo.lat}
                 lng={country.countryInfo.long}
                 countryEntity={country}
-                onClickHandler={()=>this.handleShow}/>
+                onClickHandler={()=>this.handleShow(country)}/>
               )
             }
           </GoogleMapReact>
-          <Modal show={this.state.showModal} onHide={()=>this.handleClose}>
+          <Modal 
+            show={this.state.showModal} 
+            onHide={()=>this.handleClose()}
+            size="sm"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered >
             <Modal.Header closeButton>
-              <Modal.Title>Modal heading</Modal.Title>
+            <Modal.Title>{this.state.selectedCountryEntity.country}</Modal.Title>
             </Modal.Header>
-            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-            <Modal.Footer>
-              <Button variant="secondary" onClick={()=>this.handleClose}>
-                Close
-              </Button>
-              <Button variant="primary" onClick={()=>this.handleClose}>
-                Save Changes
-              </Button>
-            </Modal.Footer>
+            <Modal.Body>                
+              <b>{this.state.selectedCountryEntity.cases
+              }</b> cases 
+              <br/><b>{
+              this.state.selectedCountryEntity.recovered
+              }</b> recovered
+              <br/><b>{
+              this.state.selectedCountryEntity.deaths
+              }</b> deaths               
+            </Modal.Body>
           </Modal>
         </div>
     );
