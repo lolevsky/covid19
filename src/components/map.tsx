@@ -5,25 +5,17 @@ import GoogleMapReact from 'google-map-react';
 import { firebaseAnalytics } from './firebase/firebase';
 import { covidAPI } from '../api/covidAPI';
 import { countryEntity } from '../model/country';
+import { Modal, Button } from 'react-bootstrap';
 
-export const CircleReactComponent = ({numberCases} : { numberCases: number, lat: number , lng: number} ) => {
-  // var circleStyle = {
-  //   display:'inline-block',
-  //   backgroundColor: '#8884d8',
-  //   borderRadius: '50%',
-  //   width:numberCases/1000,
-  //   height:numberCases/1000,
-  // };
-
+export const DataReactComponent = ({countryEntity, onClickHandler} : { onClickHandler: Function, countryEntity: countryEntity, lat: number , lng: number} ) => {
+  
   var textStyle = {
     color: 'red',
-    fontSize: numberCases/3000 > 12 ? numberCases/3000 + 'px' : '12px'
+    fontSize: countryEntity.cases/3000 > 12 ? countryEntity.cases/3000 + 'px' : '12px'
   };
 
-  //<div style={circleStyle}>
-  //</div>;
-  return  <p style={textStyle}>
-                <b>{numberCases}</b>
+  return  <p style={textStyle} onClick={() => onClickHandler()}>
+                <b>{countryEntity.cases}</b>
               </p>;
           
 }
@@ -33,15 +25,21 @@ interface Props {
 
 interface State {
   isFetchingCountries: boolean,
-  countries: Array<countryEntity>
+  countries: Array<countryEntity>,
+  showModal: boolean
 }
 
 class MapPage extends React.Component<Props, State>{
+
+  handleClose = () => this.setState({showModal: false});
+  handleShow = () => this.setState({showModal: true});
+  
   constructor(props: any) {
     super(props);
     this.state = {
         isFetchingCountries: true,
-        countries: []
+        countries: [],
+        showModal: false
     };
   };
 
@@ -67,13 +65,28 @@ class MapPage extends React.Component<Props, State>{
             defaultZoom={0}>
             {this.state.isFetchingCountries ? '' : 
               this.state.countries.filter((country) => country.cases > 1000).map((country: countryEntity) => 
-              <CircleReactComponent
+              <DataReactComponent
                 lat={country.countryInfo.lat}
                 lng={country.countryInfo.long}
-                numberCases={country.cases}/>
+                countryEntity={country}
+                onClickHandler={()=>this.handleShow}/>
               )
             }
           </GoogleMapReact>
+          <Modal show={this.state.showModal} onHide={()=>this.handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Modal heading</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={()=>this.handleClose}>
+                Close
+              </Button>
+              <Button variant="primary" onClick={()=>this.handleClose}>
+                Save Changes
+              </Button>
+            </Modal.Footer>
+          </Modal>
         </div>
     );
   }
