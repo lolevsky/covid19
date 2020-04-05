@@ -4,9 +4,9 @@ import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 import Navigation from './navigation';
 
-import AboutPage from './about';
-import ReportPage from './report';
-import MapPage from './map';
+import AboutPage from './pages/about';
+import ReportPage from './pages/report';
+import MapPage from './pages/map';
 
 import * as ROUTES from '../constants/routes';
 import { firebaseAnalytics } from './firebase/firebase';

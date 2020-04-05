@@ -1,12 +1,13 @@
 import React from 'react';
 
 import { Container } from 'react-bootstrap';
-import { firebaseAnalytics } from './firebase/firebase';
+import { firebaseAnalytics } from '../firebase/firebase';
 
 class AboutPage extends React.Component{
 
     public componentDidMount() {
-        firebaseAnalytics.logEvent('LandingPage - loaded')
+        firebaseAnalytics.setCurrentScreen('About')
+        firebaseAnalytics.logEvent('About - loaded')
     }
 
     public render() {

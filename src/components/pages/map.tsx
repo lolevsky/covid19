@@ -1,10 +1,11 @@
 import React from 'react';
 
-import { firebaseAnalytics } from './firebase/firebase';
-import { covidAPI } from '../api/covidAPI';
-import { countryEntity, createEmptyCountryEntity } from '../model/country';
+import { firebaseAnalytics } from '../firebase/firebase';
+import { covidAPI } from '../../api/covidAPI';
+import { countryEntity, createEmptyCountryEntity } from '../../model/country';
 import { Modal } from 'react-bootstrap';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
+import mapConfig from "../map/mapConfig";
 
 // export const DataReactComponent = ({countryEntity, onClickHandler} : { onClickHandler: any, countryEntity: countryEntity, lat: number , lng: number} ) => {
 //   const greatPlaceStyle = {
@@ -49,12 +50,13 @@ class MapPage extends React.Component<Props, State>{
   };
 
   public componentDidMount() {
-    firebaseAnalytics.logEvent('map - Loaded')
+    firebaseAnalytics.setCurrentScreen('Map')
+    firebaseAnalytics.logEvent('Map - Loaded')
 
     covidAPI.getAllCountries().then((countries) =>{
       this.setState({countries: countries, isFetchingCountries: false})
     }).catch(err => {
-      firebaseAnalytics.logEvent('Map page - alert ' + err)
+      firebaseAnalytics.logEvent('Map - alert ' + err)
       alert(err)});
   }
 
@@ -112,5 +114,5 @@ class MapPage extends React.Component<Props, State>{
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyDp_Z7LKwj58lrnzVv0twhso6Q5atFZumM'
+  apiKey: mapConfig.apiKey
   })(MapPage);

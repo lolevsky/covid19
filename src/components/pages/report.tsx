@@ -6,13 +6,13 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, AreaChart, Area, Bar, BarChart,
   } from 'recharts';
 
-import * as cookieName from '../constants/cookiesname';
+import * as cookieName from '../../constants/cookiesname';
 
-import { countryEntity } from '../model/country';
-import { historicalEntity, createEmptyHistoricalEntity } from '../model/historical';
-import { timelineData, createTimelineData } from '../model/timelineData';
-import { covidAPI } from '../api/covidAPI';
-import { firebaseAnalytics } from './firebase/firebase';
+import { countryEntity } from '../../model/country';
+import { historicalEntity, createEmptyHistoricalEntity } from '../../model/historical';
+import { timelineData, createTimelineData } from '../../model/timelineData';
+import { covidAPI } from '../../api/covidAPI';
+import { firebaseAnalytics } from '../firebase/firebase';
 
 interface Props {
 }
@@ -42,7 +42,8 @@ class ReportPage extends Component<Props, State> {
     };
 
     public componentDidMount() {
-        firebaseAnalytics.logEvent('Report page - loaded')
+        firebaseAnalytics.setCurrentScreen('Report')
+        firebaseAnalytics.logEvent('Report - loaded')
 
         covidAPI.getAllCountries().then((countries) =>{
             countries.sort((obj1, obj2) => {
@@ -61,8 +62,9 @@ class ReportPage extends Component<Props, State> {
               this.handleCountryClick(this.state.selectedCountryEntity)
             }
         }).catch(err => {
-            firebaseAnalytics.logEvent('Report page - alert ' + err)
-            alert(err)});
+            firebaseAnalytics.logEvent('Report - alert ' + err)
+            alert(err + ' Oops, we have some issu, please try to refresh')
+        });
     }
 
     handleCountryClick(country: countryEntity) {
@@ -75,7 +77,10 @@ class ReportPage extends Component<Props, State> {
           this.setState({historicalEntity: historicalEntity, isFetchingData: false})
           this.prepareDataForGraph()
         }
-        ).catch(err => alert(err + ' Oops, we have some issu, please try to refresh'));
+        ).catch(err => {
+            firebaseAnalytics.logEvent('Report - alert ' + err)
+            alert(err + ' Oops, we have some issu, please try to refresh')
+        });
     }
 
     prepareDataForGraph(){
