@@ -79,7 +79,7 @@ class MapPage extends React.Component<Props, State>{
                     onClick={() => this.handleShow(country)}
                     icon={{
                       url: "/logo64.png",
-                      anchor: new google.maps.Point(0,0),
+                      anchor: new google.maps.Point(16,16),
                       scaledSize: new google.maps.Size(32,32)
                     }}
                   />
