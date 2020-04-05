@@ -4,7 +4,7 @@ import {historicalEntity} from '../model/historical';
 class CovidAPI {
 
     api<T>(url: string): Promise<T> {
-        return fetch(url, {cache: "force-cache"})
+        return fetch(url)
             .then((response) => this.checkStatus(response))
             .then(response => {
                 return response.json() as Promise<T>
