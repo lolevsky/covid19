@@ -7,18 +7,6 @@ import { Modal } from 'react-bootstrap';
 import { Map, GoogleApiWrapper, Marker } from 'google-maps-react';
 import mapConfig from "../map/mapConfig";
 
-// export const DataReactComponent = ({countryEntity, onClickHandler} : { onClickHandler: any, countryEntity: countryEntity, lat: number , lng: number} ) => {
-//   const greatPlaceStyle = {
-//     position: 'absolute' as 'absolute',
-//     color: 'red',
-//     fontSize: countryEntity.cases/3000 > 12 ? countryEntity.cases/3000 + 'px' : '12px'
-//   }
-
-//   return  <div style={greatPlaceStyle} onClick={() => onClickHandler()}>
-//               <b>{countryEntity.cases}</b>
-//           </div>;   
-// }
-
 interface Props {
   google: any;
 }
@@ -36,6 +24,7 @@ class MapPage extends React.Component<Props, State>{
     this.setState({showModal: false, selectedCountryEntity: createEmptyCountryEntity()});
   }
   handleShow(countryEntity: countryEntity){
+    firebaseAnalytics.logEvent('Map marker click - ' + countryEntity.country)
     this.setState({showModal: true, selectedCountryEntity: countryEntity});
   }
   

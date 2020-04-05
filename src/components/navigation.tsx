@@ -7,8 +7,7 @@ import { Link } from 'react-router-dom'
 import { Navbar, Nav, Container } from 'react-bootstrap';
 
 const Navigation = () => (
-    
-        <Navbar bg="primary" variant="dark" expand="lg" sticky="top">
+        <Navbar bg="primary" variant="dark" expand="md" sticky="top">
             <Container>
             <Navbar.Brand as={Link} to={ROUTES.ABOUT}>COVID19 Data</Navbar.Brand>
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
