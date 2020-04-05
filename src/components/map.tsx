@@ -17,7 +17,7 @@ export const CircleReactComponent = ({numberCases} : { numberCases: number, lat:
 
   var textStyle = {
     color: 'red',
-    fontSize: numberCases/3000 + 'px'
+    fontSize: numberCases/3000 > 12 ? numberCases/3000 + 'px' : '12px'
   };
 
   //<div style={circleStyle}>

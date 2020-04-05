@@ -100,7 +100,8 @@ class ReportPage extends Component<Props, State> {
 		}
         return (
             <Container>
-                <p>{this.state.isFetchingCountries ? 'Fetching data...' : 
+                <br/>
+                <div style={{display: 'flex', justifyContent: 'center'}}>{this.state.isFetchingCountries ? 'Fetching data...' : 
                     <div>
                         <Container style={{display: 'flex', justifyContent: 'center'}}>
                                 <DropdownButton id="dropdown-basic-button" title={!!this.state.selectedCountryEntity? this.state.selectedCountryEntity.country : 'Please select country'} >
@@ -177,7 +178,7 @@ class ReportPage extends Component<Props, State> {
                             </Container>
                         }
                     </div>
-                }</p>
+                }</div>
             </Container>
         )
     };
