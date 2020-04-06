@@ -24,7 +24,8 @@ interface State {
     countries: Array<countryEntity>,
     historicalEntity: historicalEntity,
     timelineData: Array<timelineData>,
-    selectedCountryEntity: countryEntity
+    selectedCountryEntity: countryEntity,
+    width: number
 }
 
 const cookies = new Cookies();
@@ -38,7 +39,8 @@ class ReportPage extends Component<Props, State> {
             countries: [],
             historicalEntity: createEmptyHistoricalEntity(),
             timelineData: [],
-            selectedCountryEntity: cookies.get(cookieName.SELECTED_COUNTRY_ENTETY)
+            selectedCountryEntity: cookies.get(cookieName.SELECTED_COUNTRY_ENTETY),
+            width: window.innerWidth,
         };
     };
 
@@ -94,14 +96,34 @@ class ReportPage extends Component<Props, State> {
                 country.country,
                 date,
                 cases, 
-                0,
-                0
+                Object.entries(country.timeline.deaths)[i][1],
+                Object.entries(country.timeline.recovered)[i][1]
             ))
 
         this.setState({timelineData: dataMapping})
     }
 
+    componentWillMount() {
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+    
+    handleWindowSizeChange = () => {
+        this.setState({ width: window.innerWidth });
+    }
+
     render() {
+        const { width } = this.state;
+        const isMobile = width <= 700;
+
+        const divStyleGridContainer = {
+            display: 'grid',
+            gridTemplateColumns: isMobile? '100%' : '50% 50%'
+        }
+
         if (this.state == null) {
 			return <div style={{display: 'flex', justifyContent: 'center'}}>Loading...</div>
 		}
@@ -147,47 +169,51 @@ class ReportPage extends Component<Props, State> {
                         }
                         </div>
                         {this.state.isFetchingData ? '' : 
-                            <div>
-                                <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                    <LineChart
-                                        data={this.state.timelineData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
-                                        <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
-                                        <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
-                                    </LineChart>
-                                </ResponsiveContainer>
-                                <br/>
-                                <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                    <BarChart data={this.state.timelineData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Legend />
-                                        <Bar dataKey="cases" fill="#8884d8" />
-                                        <Bar dataKey="deaths" fill="#82ca9d" />
-                                        <Bar dataKey="recovered" fill="#ffc658" />
-                                    </BarChart>
-                                </ResponsiveContainer>
-                                <br/>
-                                <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                    <AreaChart width={500}
-                                        height={400}
-                                        data={this.state.timelineData}>
-                                        <CartesianGrid strokeDasharray="3 3" />
-                                        <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                        <YAxis />
-                                        <Tooltip />
-                                        <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                                        <Area type="monotone" dataKey="deaths" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                                        <Area type="monotone" dataKey="recovered" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                                    </AreaChart>
-                                </ResponsiveContainer>
+                            <div style={divStyleGridContainer}>
+                                <div>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                        <LineChart
+                                            data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
+                                            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
+                                            <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
+                                        </LineChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                        <BarChart data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Legend />
+                                            <Bar dataKey="cases" fill="#8884d8" />
+                                            <Bar dataKey="deaths" fill="#82ca9d" />
+                                            <Bar dataKey="recovered" fill="#ffc658" />
+                                        </BarChart>
+                                    </ResponsiveContainer>
+                                </div>
+                                <div>
+                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                        <AreaChart width={500}
+                                            height={400}
+                                            data={this.state.timelineData}>
+                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                            <YAxis />
+                                            <Tooltip />
+                                            <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                                            <Area type="monotone" dataKey="deaths" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                                            <Area type="monotone" dataKey="recovered" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                                        </AreaChart>
+                                    </ResponsiveContainer>
+                                </div>
                             </div>
                         }
                     </div>

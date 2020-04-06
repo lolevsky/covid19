@@ -12,16 +12,8 @@ interface Props {
 interface State {
     isFetchingData: boolean,
     historicalEntities: Array<historicalEntity>,
-    timelineData: Array<Array<timelineData>>
-}
-
-const divStyleGridContainer = {
-    display: 'grid',
-    gridTemplateColumns: '33% 33% 33%'
-}
-
-const divStyleGridItem = {
-  
+    timelineData: Array<Array<timelineData>>,
+    width: number
 }
 
 class NewcCases extends Component<Props, State> {
@@ -31,6 +23,7 @@ class NewcCases extends Component<Props, State> {
             isFetchingData: true,
             historicalEntities: [],
             timelineData: [],
+            width: window.innerWidth,
         };
     };
 
@@ -97,10 +90,31 @@ class NewcCases extends Component<Props, State> {
         return dataMappingNewCases
     }
     
+    componentWillMount() {
+        window.addEventListener('resize', this.handleWindowSizeChange);
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleWindowSizeChange);
+    }
+    
+    handleWindowSizeChange = () => {
+        this.setState({ width: window.innerWidth });
+    }
+
     render(){
         if (this.state == null) {
 			return <div style={{display: 'flex', justifyContent: 'center'}}>Loading...</div>
-		}
+        }
+        
+        const { width } = this.state;
+        const isMobile = width <= 700;
+
+        const divStyleGridContainer = {
+            display: 'grid',
+            gridTemplateColumns: isMobile? '100%' : '33% 33% 33%'
+        }
+
         return (
             <Container>
                 <br/>
@@ -108,13 +122,13 @@ class NewcCases extends Component<Props, State> {
                                                     'Fetching data...' 
                                                 </div> :
                     <div>
-                        <h2>New cases by country</h2>
+                        <h3>New cases by country</h3>
                         <div style={divStyleGridContainer}>
                         {
                         this.state.timelineData.map((timelineDataArray, i) => {
                             if(timelineDataArray.length>0){ 
-                                return <div style={divStyleGridItem}>
-                                            <h3>{timelineDataArray[0].country}</h3>
+                                return <div>
+                                            <h5>{timelineDataArray[0].country}</h5>
                                             <ResponsiveContainer width='100%' aspect={4.0/3.0}>
                                                 <LineChart
                                                     data={timelineDataArray}>
