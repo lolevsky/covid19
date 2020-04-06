@@ -27,6 +27,10 @@ class CovidAPI {
     public async getHistoricalByCountry(country: string) : Promise<historicalEntity> {
         return this.api<historicalEntity>('https://corona.lmao.ninja/v2/historical/'+country);
     }
+
+    public async getHistoricalAllCountry() : Promise<historicalEntity[]> {
+        return this.api<historicalEntity[]>('https://corona.lmao.ninja/v2/historical/');
+    }
 }
 
 export const covidAPI = new CovidAPI();

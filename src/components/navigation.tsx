@@ -47,6 +47,7 @@ class Navigation extends React.Component {
         <Navbar.Collapse id="responsive-navbar-nav">
             <Nav className="mr-auto">
                 <Nav.Link as={Link} to={ROUTES.REPORT}>Report</Nav.Link>
+                <Nav.Link as={Link} to={ROUTES.NEWCASES}>New cases</Nav.Link>
                 <Nav.Link as={Link} to={ROUTES.MAP}>Map</Nav.Link>
                 <Nav.Link as={Link} to={ROUTES.ABOUT}>About</Nav.Link>
             </Nav>

@@ -75,8 +75,8 @@ class ReportPage extends Component<Props, State> {
         cookies.set(cookieName.SELECTED_COUNTRY_ENTETY, country, { path: '/' });
 
         covidAPI.getHistoricalByCountry(country.country).then((historicalEntity) => {
+          this.prepareDataForGraph(historicalEntity)
           this.setState({historicalEntity: historicalEntity, isFetchingData: false})
-          this.prepareDataForGraph()
         }
         ).catch(err => {
             firebaseAnalytics.logEvent('Report - alert ' + err)
@@ -84,18 +84,19 @@ class ReportPage extends Component<Props, State> {
         });
     }
 
-    prepareDataForGraph(){
+    prepareDataForGraph(historicalEntity: historicalEntity){
         this.setState({timelineData: []})
         var dataMapping: Array<timelineData>  = []
+        var country = historicalEntity;
 
-        Object.entries(this.state.historicalEntity.timeline.cases).map(([date, cases], i) => 
+        Object.entries(country.timeline.cases).map(([date, cases], i) => 
             dataMapping[i] = createTimelineData(
-                date, 
+                country.country,
+                date,
                 cases, 
-                Object.entries(this.state.historicalEntity.timeline.deaths)[i][1],
-                Object.entries(this.state.historicalEntity.timeline.recovered)[i][1]
-            )
-        )
+                0,
+                0
+            ))
 
         this.setState({timelineData: dataMapping})
     }
@@ -197,4 +198,3 @@ class ReportPage extends Component<Props, State> {
 }
 
 export default ReportPage;
-export { ReportPage };

@@ -1,5 +1,6 @@
 export interface historicalEntity {
     country: string;
+    province: string;
     timeline: {
       cases: Object;
       deaths: Object;
@@ -9,6 +10,7 @@ export interface historicalEntity {
   
 export const createEmptyHistoricalEntity = () : historicalEntity => ({
     country: "",
+    province: "",
     timeline: {
       cases: {},
       deaths: {},
