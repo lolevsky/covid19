@@ -179,21 +179,21 @@ class ReportPage extends Component<Props, State> {
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
-                                            <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
-                                            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" />
-                                            <Line type="monotone" dataKey="recovered" stroke="#ffc658" />
+                                            <Line type="monotone" dataKey="cases" stroke="#8884d8" strokeWidth='2px' activeDot={{ r: 8 }} />
+                                            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" strokeWidth='2px'/>
+                                            <Line type="monotone" dataKey="recovered" stroke="#ffc658" strokeWidth='2px'/>
                                         </LineChart>
                                     </ResponsiveContainer>
                                 </div>
                                 <div>
                                     <ResponsiveContainer width='100%' aspect={4.0/3.0}>
                                         <BarChart data={this.state.timelineData}>
-                                            <CartesianGrid strokeDasharray="3 3" />
+                                            <CartesianGrid strokeDasharray="1 1 1" />
                                             <XAxis dataKey="date" tick={{fontSize: 10}}/>
                                             <YAxis />
                                             <Tooltip />
                                             <Legend />
-                                            <Bar dataKey="cases" fill="#8884d8" />
+                                            <Bar dataKey="cases" fill="#8884d8"/>
                                             <Bar dataKey="deaths" fill="#82ca9d" />
                                             <Bar dataKey="recovered" fill="#ffc658" />
                                         </BarChart>
