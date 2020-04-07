@@ -132,7 +132,7 @@ class ReportPage extends Component<Props, State> {
                 <br/>
                 <div >{this.state.isFetchingCountries ? 
                                                     <div style={{display: 'flex', justifyContent: 'center'}}>
-                                                    'Fetching data...' 
+                                                    Fetching data...
                                                     </div>: 
                     <div>
                         <div style={{display: 'flex', justifyContent: 'center'}}>

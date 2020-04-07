@@ -67,7 +67,7 @@ class NewcCases extends Component<Props, State> {
                     )
             })
         }).filter(timeline => 
-            timeline[timeline.length-1].cases > 50
+            timeline[timeline.length-1].cases > 20
         ).map(timelines => 
             dataMappingNewCases.push(timelines)
         )
@@ -119,7 +119,7 @@ class NewcCases extends Component<Props, State> {
             <Container>
                 <br/>
                 {this.state.isFetchingData ?    <div style={{display: 'flex', justifyContent: 'center'}}>
-                                                    'Fetching data...' 
+                                                    Fetching data... 
                                                 </div> :
                     <div>
                         <h3>New cases by country</h3>
