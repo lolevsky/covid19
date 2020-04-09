@@ -14,6 +14,7 @@ import { timelineData, createTimelineData } from '../../model/timelineData';
 import { covidAPI } from '../../api/covidAPI';
 import { firebaseAnalytics } from '../firebase/firebase';
 import { CustomMenu } from '../custom/CustomMenu';
+import { casesMaping } from '../utils/casesMaping';
 
 interface Props {
 }
@@ -23,7 +24,8 @@ interface State {
     isFetchingData: boolean,
     countries: Array<countryEntity>,
     historicalEntity: historicalEntity,
-    timelineData: Array<timelineData>,
+    timelineDataReport: Array<timelineData>,
+    timelineDataNewCases: Array<timelineData>,
     selectedCountryEntity: countryEntity,
     width: number
 }
@@ -38,17 +40,18 @@ class ReportPage extends Component<Props, State> {
             isFetchingData: true,
             countries: [],
             historicalEntity: createEmptyHistoricalEntity(),
-            timelineData: [],
+            timelineDataReport: [],
+            timelineDataNewCases: [],
             selectedCountryEntity: cookies.get(cookieName.SELECTED_COUNTRY_ENTETY),
             width: window.innerWidth,
         };
     };
 
-    public componentDidMount() {
+    public async componentDidMount() {
         firebaseAnalytics.setCurrentScreen('Report')
         firebaseAnalytics.logEvent('Report - loaded')
 
-        covidAPI.getAllCountries().then((countries) =>{
+        await covidAPI.getAllCountries().then((countries) =>{
             countries.sort((obj1, obj2) => {
                 if (obj1.country > obj2.country) {
                     return 1;
@@ -87,8 +90,9 @@ class ReportPage extends Component<Props, State> {
     }
 
     prepareDataForGraph(historicalEntity: historicalEntity){
-        this.setState({timelineData: []})
+        this.setState({timelineDataReport: []})
         var dataMapping: Array<timelineData>  = []
+        var dataMappingNewCases: Array<timelineData>  = []
         var country = historicalEntity;
 
         Object.entries(country.timeline.cases).map(([date, cases], i) => 
@@ -99,8 +103,10 @@ class ReportPage extends Component<Props, State> {
                 Object.entries(country.timeline.deaths)[i][1],
                 Object.entries(country.timeline.recovered)[i][1]
             ))
+        
+        dataMappingNewCases = casesMaping.maphistoricalEntitiesTotimelineDataSingle(historicalEntity)
 
-        this.setState({timelineData: dataMapping})
+        this.setState({timelineDataReport: dataMapping, timelineDataNewCases: dataMappingNewCases})
     }
 
     componentWillMount() {
@@ -148,6 +154,9 @@ class ReportPage extends Component<Props, State> {
                                     }
                                 </Dropdown.Menu>
                              </Dropdown>
+                             <br/>
+                             <br/>
+                             <br/>
                         </div>
                         <div style={{display: 'flex', justifyContent: 'center'}}>
                         {
@@ -169,50 +178,55 @@ class ReportPage extends Component<Props, State> {
                         }
                         </div>
                         {this.state.isFetchingData ? '' : 
-                            <div style={divStyleGridContainer}>
-                                <div>
-                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                        <LineChart
-                                            data={this.state.timelineData}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Legend />
-                                            <Line type="monotone" dataKey="cases" stroke="#8884d8" strokeWidth='2px' activeDot={{ r: 8 }} />
-                                            <Line type="monotone" dataKey="deaths" stroke="#82ca9d" strokeWidth='2px'/>
-                                            <Line type="monotone" dataKey="recovered" stroke="#ffc658" strokeWidth='2px'/>
-                                        </LineChart>
-                                    </ResponsiveContainer>
+                            <div>
+                                <h3 style={{display: 'flex', justifyContent: 'center'}}>Cases report</h3>
+                                <div style={divStyleGridContainer}>
+                                    <div>
+                                        <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                            <LineChart
+                                                data={this.state.timelineDataReport}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Line type="monotone" dataKey="cases" stroke="#8884d8" strokeWidth='2px' activeDot={{ r: 8 }} />
+                                                <Line type="monotone" dataKey="deaths" stroke="#82ca9d" strokeWidth='2px'/>
+                                                <Line type="monotone" dataKey="recovered" stroke="#ffc658" strokeWidth='2px'/>
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
+                                    <div>
+                                        <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                            <AreaChart width={500}
+                                                height={400}
+                                                data={this.state.timelineDataReport}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
+                                                <Area type="monotone" dataKey="deaths" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
+                                                <Area type="monotone" dataKey="recovered" stackId="1" stroke="#ffc658" fill="#ffc658" />
+                                            </AreaChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
+                                <h3 style={{display: 'flex', justifyContent: 'center'}}>New cases</h3>
                                 <div>
-                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                        <BarChart data={this.state.timelineData}>
-                                            <CartesianGrid strokeDasharray="1 1 1" />
-                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Legend />
-                                            <Bar dataKey="cases" fill="#8884d8"/>
-                                            <Bar dataKey="deaths" fill="#82ca9d" />
-                                            <Bar dataKey="recovered" fill="#ffc658" />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                                <div>
-                                    <ResponsiveContainer width='100%' aspect={4.0/3.0}>
-                                        <AreaChart width={500}
-                                            height={400}
-                                            data={this.state.timelineData}>
-                                            <CartesianGrid strokeDasharray="3 3" />
-                                            <XAxis dataKey="date" tick={{fontSize: 10}}/>
-                                            <YAxis />
-                                            <Tooltip />
-                                            <Area type="monotone" dataKey="cases" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                                            <Area type="monotone" dataKey="deaths" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                                            <Area type="monotone" dataKey="recovered" stackId="1" stroke="#ffc658" fill="#ffc658" />
-                                        </AreaChart>
-                                    </ResponsiveContainer>
+                                    <div>
+                                        <ResponsiveContainer width='100%' aspect={4.0/3.0}>
+                                            <LineChart
+                                                data={this.state.timelineDataNewCases}>
+                                                <CartesianGrid strokeDasharray="3 3" />
+                                                <XAxis dataKey="date" tick={{fontSize: 10}}/>
+                                                <YAxis />
+                                                <Tooltip />
+                                                <Legend />
+                                                <Line type="monotone" dataKey="cases" stroke="#8884d8" activeDot={{ r: 8 }} />
+                                            </LineChart>
+                                        </ResponsiveContainer>
+                                    </div>
                                 </div>
                             </div>
                         }
