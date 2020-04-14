@@ -10,6 +10,23 @@ Open source librries that used for this project are:
 - Universal cookie https://github.com/reactivestack/cookies/tree/master/packages/universal-cookie#readme
 - Google maps react https://github.com/fullstackreact/google-maps-react#readme
 
+Need to add:
+- src/components/map/mapConfig.ts
+    export default {	
+        apiKey: '...'	
+    };
+- src/components/firebase/firebaseConfig.ts
+    export default {	
+        apiKey: "...",	
+        authDomain: "...firebaseapp.com",	
+        databaseURL: "https://...firebaseio.com",	
+        projectId: "...",	
+        storageBucket: "....appspot.com",	
+        messagingSenderId: "...",	
+        appId: "...",	
+        measurementId: "..."	
+    };
+
 How to run:
 - Host:
     - To run localy:
