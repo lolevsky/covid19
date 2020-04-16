@@ -4,6 +4,10 @@
 /node_modules
 /functions/node_modules
 
+#config
+/src/components/firebase/firebaseConfig.ts
+/src/components/map/mapConfig.ts
+
 # testing
 /coverage
 
