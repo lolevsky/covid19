@@ -1,4 +1,4 @@
-About
+# About
 
 Source code of COVID19 info page, All the data fetched from https://github.com/novelcovid/api
 
@@ -10,7 +10,25 @@ Open source librries that used for this project are:
 - Universal cookie https://github.com/reactivestack/cookies/tree/master/packages/universal-cookie#readme
 - Google maps react https://github.com/fullstackreact/google-maps-react#readme
 
-How to run:
+## Need to add:
+- src/components/map/mapConfig.ts
+    ```javascript
+    export default {	
+        apiKey: '...'	
+    };
+- src/components/firebase/firebaseConfig.ts
+    ```javascript
+    export default {	
+        apiKey: "...",	
+        authDomain: "...firebaseapp.com",	
+        databaseURL: "https://...firebaseio.com",	
+        projectId: "...",	
+        storageBucket: "....appspot.com",	
+        messagingSenderId: "...",	
+        appId: "...",	
+        measurementId: "..."	
+    };
+## How to run:
 - Host:
     - To run localy:
         - npm install
