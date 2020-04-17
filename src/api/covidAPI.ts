@@ -1,6 +1,8 @@
 import {countryEntity} from '../model/country';
 import {historicalEntity} from '../model/historical';
 
+const baseApi = 'https://corona.lmao.ninja/v2'
+
 class CovidAPI {
 
     api<T>(url: string): Promise<T> {
@@ -21,15 +23,15 @@ class CovidAPI {
     }
 
     public async getAllCountries() : Promise<countryEntity[]> {
-        return this.api<countryEntity[]>('https://corona.lmao.ninja/countries?sort=country');
+        return this.api<countryEntity[]>(baseApi + '/countries?sort=country');
     }
 
     public async getHistoricalByCountry(country: string) : Promise<historicalEntity> {
-        return this.api<historicalEntity>('https://corona.lmao.ninja/v2/historical/'+country);
+        return this.api<historicalEntity>(baseApi + '/historical/' + country);
     }
 
     public async getHistoricalAllCountry() : Promise<historicalEntity[]> {
-        return this.api<historicalEntity[]>('https://corona.lmao.ninja/v2/historical/');
+        return this.api<historicalEntity[]>(baseApi + '/historical/');
     }
 }
 
