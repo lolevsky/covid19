@@ -10,7 +10,7 @@ class CasesMaping {
         historicalEntities.map((historical) => {        
             return this.maphistoricalEntitiesTotimelineDataSingle(historical)
         }).filter(timeline => 
-            timeline[(timeline).length-1].cases > 20
+            timeline[(timeline).length-1].cases > 10
         ).map(timelines => 
             dataMappingNewCases.push(timelines)
         )
@@ -21,8 +21,12 @@ class CasesMaping {
     public maphistoricalEntitiesTotimelineDataSingle(historicalEntitity: historicalEntity):timelineData[]{
         var pervCase = 0
         
-        return Object.entries(historicalEntitity.timeline.cases).map(([date, cases]) => {
+        return Object.entries(historicalEntitity.timeline.cases).map(([date, cases], index) => {
             var newCase = cases - pervCase
+            if(index === 0){
+                newCase = 0
+            } 
+            
             pervCase = cases
             
             return createTimelineData(

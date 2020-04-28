@@ -2,7 +2,7 @@ import React,  { Component } from 'react';
 import { firebaseAnalytics } from '../firebase/firebase';
 import { covidAPI } from '../../api/covidAPI';
 import { historicalEntity } from '../../model/historical';
-import { timelineData, createTimelineData } from '../../model/timelineData';
+import { timelineData } from '../../model/timelineData';
 import { Container } from 'react-bootstrap';
 import { ResponsiveContainer, LineChart, CartesianGrid, XAxis, YAxis, Legend, Line, Tooltip } from 'recharts';
 import { casesMaping } from '../utils/casesMaping';
@@ -84,7 +84,7 @@ class NewcCases extends Component<Props, State> {
                         <h3 style={{display: 'flex', justifyContent: 'center'}}>New cases by country</h3>
                         <div style={divStyleGridContainer}>
                         {
-                        this.state.timelineData.map((timelineDataArray, i) => {
+                        this.state.timelineData.map((timelineDataArray) => {
                             if(timelineDataArray.length>0){ 
                                 return <div>
                                             <h5 style={{display: 'flex', justifyContent: 'center'}}>{timelineDataArray[0].country}</h5>
