@@ -77,7 +77,7 @@ class ReportPage extends Component<Props, State> {
         firebaseAnalytics.logEvent('Report country selected - ' + country.country)
 
         this.setState({selectedCountryEntity: country, isFetchingData: true});
-        cookies.set(cookieName.SELECTED_COUNTRY_ENTETY, country, { path: '/' });
+        cookies.set(cookieName.SELECTED_COUNTRY_ENTETY, country, { path: '/', maxAge: Number.MAX_SAFE_INTEGER});
 
         covidAPI.getHistoricalByCountry(country.country).then((historicalEntity) => {
           this.prepareDataForGraph(historicalEntity)
